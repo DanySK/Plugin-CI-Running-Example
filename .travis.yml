@@ -37,4 +37,4 @@ before_install:
   - source $GRAVIS/install-jdk # Install the JDK you configured in the $JDK environment variable
 
 script:
-  - ./gradlew check
+  - travis_retry ./gradlew check
