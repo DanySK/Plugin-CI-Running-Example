@@ -29,6 +29,8 @@ stages:
   - check # This is for running the stage before test
   - test
   - deploy
+    # Disable Deploy for PRs
+    if: repo = DanySK/Plugin-CI-Running-Example
 
 _check_job: &check_job
   stage: check
@@ -47,6 +49,8 @@ jobs:
           name: *linux_workspace
           paths: "${TRAVIS_BUILD_DIR}"
     - stage: deploy
+      install:
+        - openssl aes-256-cbc -K $encrypted_f778b2e1574b_key -iv $encrypted_f778b2e1574b_iv -in secrets.asc.enc -out secrets.asc -d
       script: # This overrides the default settings
         - echo Deploy! # Problem: we need to pass credentials...
       workspaces: # Reuse the work done in the initial phase
