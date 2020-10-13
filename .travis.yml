@@ -1,4 +1,4 @@
-language: java
+language: minimal
 
 git:
   depth: false # Accepts false or any number representing the commit count, defaults to 50
@@ -7,5 +7,14 @@ git:
 os:
     - linux
     - osx
-# Unsupported for java
-#   - windows
+    - windows
+
+env:
+  global:
+    - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git" # Convenience variable for shortening commands
+    - GRAVIS="$HOME/gravis" # Convenience variable for shortening commands
+    - JDK="adopt@1.11.0-8" # Partial versions supported, adopt@1.11 would pull the latest adopt 1.11
+
+before_install:
+  - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS # Check out the script set
+  - source $GRAVIS/install-jdk # Install the JDK you configured in the $JDK environment variable
