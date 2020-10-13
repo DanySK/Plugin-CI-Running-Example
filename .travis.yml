@@ -49,12 +49,18 @@ jobs:
           name: *linux_workspace
           paths: "${TRAVIS_BUILD_DIR}"
     - stage: deploy
+      workspaces: # Reuse the work done in the initial phase
+        use: *linux_workspace
       install:
         - openssl aes-256-cbc -K $encrypted_f778b2e1574b_key -iv $encrypted_f778b2e1574b_iv -in secrets.asc.enc -out secrets.asc -d
       script: # This overrides the default settings
         - ./gradlew sign publishPlugins publishMavenCentralPublicationToMavenRepository
-      workspaces: # Reuse the work done in the initial phase
-        use: *linux_workspace
+      deploy:
+        provider: releases # Deploys on GitHub Releases
+        file: build/libs/*.jar # Files to deploy
+        edge: true # opt in to the new deploy API
+        on:
+          tags: true
   exclude: # No need to re-run the tests we performed in the first stage
     - <<: *check_job
       stage: test # override value of 'stage'
