@@ -13,8 +13,24 @@ env:
   global:
     - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git" # Convenience variable for shortening commands
     - GRAVIS="$HOME/gravis" # Convenience variable for shortening commands
-    - JDK="adopt@1.11.0-8" # Partial versions supported, adopt@1.11 would pull the latest adopt 1.11
     - TERM="dumb" # Prevents "smart" output from Gradle
+  matrix:
+    - JDK="adopt@"
+    - JDK="adopt@1.11"
+    - JDK="adopt-openj9@"
+    - JDK="adopt-openj9@1.11"
+
+jobs:
+  include: # Add a job with default OS and the specified matrix environment
+    env:
+      - JDK="adopt@1.8" 
+  exclude: # Excludes builds with OSX and OpenJ9
+    - os: osx
+      env:
+        - JDK="adopt-openj9@"
+    - os: osx
+      env:
+        - JDK="adopt-openj9@1.11"
 
 before_install:
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS # Check out the script set
