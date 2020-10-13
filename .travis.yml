@@ -18,3 +18,6 @@ env:
 before_install:
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS # Check out the script set
   - source $GRAVIS/install-jdk # Install the JDK you configured in the $JDK environment variable
+
+script:
+  - ./gradlew check
