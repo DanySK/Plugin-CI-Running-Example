@@ -5,9 +5,9 @@ git:
   autocrlf: input # Prevents git to try to be smart with line endings
 
 os:
-    - linux
-    - osx
-    - windows
+  - linux
+  - osx
+  - windows
 
 env:
   global:
