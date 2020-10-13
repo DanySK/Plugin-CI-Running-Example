@@ -1,3 +1,8 @@
+_reference_jdk: &reference_jdk
+  'JDK="adopt@1.11.0"'
+_reference_os: &reference_os
+  'linux'
+
 language: minimal
 
 git:
@@ -16,25 +21,43 @@ env:
     - TERM="dumb" # Prevents "smart" output from Gradle
   matrix:
     - JDK="adopt@"
-    - JDK="adopt@1.11"
+    - *reference_jdk
     - JDK="adopt-openj9@"
     - JDK="adopt-openj9@1.11"
 
+stages:
+  - check # This is for running the stage before test
+  - test
+  - deploy
+
+_check_job: &check_job
+  stage: check
+  os: *reference_os
+  env: *reference_jdk
+
+_linux_workspace: &linux_workspace
+  'build-workspace'
+
 jobs:
   include: # Add a job with default OS and the specified matrix environment
-    env:
-      - JDK="adopt@1.8" 
-  exclude: # Excludes builds with OSX and OpenJ9
-    - os: osx
-      env:
-        - JDK="adopt-openj9@"
-    - os: osx
-      env:
-        - JDK="adopt-openj9@1.11"
+    - <<: *check_job # YAML merge key: inserts the map found at this anchor
+      script: ./gradlew check # Overrides the default settings
+      workspaces:
+        create: # Save the work for later use
+          name: *linux_workspace
+          paths: "${TRAVIS_BUILD_DIR}"
+    - stage: deploy
+      script: # This overrides the default settings
+        - echo Deploy! # Problem: we need to pass credentials...
+      workspaces: # Reuse the work done in the initial phase
+        use: *linux_workspace
+  exclude: # No need to re-run the tests we performed in the first stage
+    - <<: *check_job
+      stage: test # override value of 'stage'
 
 before_install:
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS # Check out the script set
   - source $GRAVIS/install-jdk # Install the JDK you configured in the $JDK environment variable
 
 script:
-  - travis_retry ./gradlew check
+  - travis_retry ./gradlew test # by default, just test. Deep check only on the reference build
