@@ -28,7 +28,7 @@ env:
 stages:
   - check # This is for running the stage before test
   - test
-  - deploy
+  - name: deploy
     # Disable Deploy for PRs
     if: repo = DanySK/Plugin-CI-Running-Example
 
