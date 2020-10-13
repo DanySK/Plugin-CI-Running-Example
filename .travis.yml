@@ -14,6 +14,7 @@ env:
     - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git" # Convenience variable for shortening commands
     - GRAVIS="$HOME/gravis" # Convenience variable for shortening commands
     - JDK="adopt@1.11.0-8" # Partial versions supported, adopt@1.11 would pull the latest adopt 1.11
+    - TERM="dumb" # Prevents "smart" output from Gradle
 
 before_install:
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS # Check out the script set
