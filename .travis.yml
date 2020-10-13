@@ -1,1 +1,7 @@
 language: java
+
+os:
+    - linux
+    - osx
+# Unsupported for java
+#   - windows
