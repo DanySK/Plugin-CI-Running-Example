@@ -2,4 +2,5 @@ language: java
 
 install: true
 script:
+    - cd $TRAVIS_BUILD_DIR
     - ./gradlew check
