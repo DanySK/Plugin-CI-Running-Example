@@ -11,8 +11,8 @@ git:
 
 os:
   - linux
-  - osx
-  - windows
+  # - osx
+  # - windows
 
 env:
   global:
@@ -20,10 +20,10 @@ env:
     - GRAVIS="$HOME/gravis" # Convenience variable for shortening commands
     - TERM="dumb" # Prevents "smart" output from Gradle
   matrix:
-    - JDK="adopt@"
     - *reference_jdk
-    - JDK="adopt-openj9@"
-    - JDK="adopt-openj9@1.11"
+    # - JDK="adopt@"
+    # - JDK="adopt-openj9@"
+    # - JDK="adopt-openj9@1.11"
 
 stages:
   - check # This is for running the stage before test
@@ -42,12 +42,12 @@ _linux_workspace: &linux_workspace
 
 jobs:
   include: # Add a job with default OS and the specified matrix environment
-    - <<: *check_job # YAML merge key: inserts the map found at this anchor
-      script: ./gradlew check # Overrides the default settings
-      workspaces:
-        create: # Save the work for later use
-          name: *linux_workspace
-          paths: "${TRAVIS_BUILD_DIR}"
+    # - <<: *check_job # YAML merge key: inserts the map found at this anchor
+    #   script: ./gradlew check # Overrides the default settings
+    #   workspaces:
+    #     create: # Save the work for later use
+    #       name: *linux_workspace
+    #       paths: "${TRAVIS_BUILD_DIR}"
     - stage: deploy
       workspaces: # Reuse the work done in the initial phase
         use: *linux_workspace
