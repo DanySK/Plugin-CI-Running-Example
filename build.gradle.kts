@@ -122,14 +122,10 @@ publishing {
     }
 }
 
-println("Begin signatory configuration")
 if (System.getenv("CI") == true.toString()) {
-    println("Configuring signatory")
     signing {
         val signingKey: String? by project
         val signingPassword: String? by project
-        println("Setting in-memory PGP signing")
         useInMemoryPgpKeys(signingKey, signingPassword)
     }
 }
-println("Signatory configuration complete")
