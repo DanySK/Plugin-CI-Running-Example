@@ -60,7 +60,7 @@ jobs:
         - ./gradlew publishMavenCentralPublicationToMavenRepository
       after_success:
         # Prevents the build from failing due to the plugin being already published
-        - ./gradlew publishPlugins -Pgradle.publish.key=GRADLE_PUBLISH_KEY -Pgradle.publish.secret=GRADLE_PUBLISH_SECRET
+        - ./gradlew publishPlugins -Pgradle.publish.key=$GRADLE_PUBLISH_KEY -Pgradle.publish.secret=$GRADLE_PUBLISH_SECRET
       deploy:
         provider: releases # Deploys on GitHub Releases
         file: build/libs/*.jar # Files to deploy
